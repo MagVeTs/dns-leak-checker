@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# MIT License
+# Copyright (c) 2025 MagVeTs
+# Permission is hereby granted, free of charge, to any person obtaining a copy...
+
 set -euo pipefail
 ##############################################################################
 # DNS-Leak-Checker – discovers internal IP & suspicious CNAME leakage
