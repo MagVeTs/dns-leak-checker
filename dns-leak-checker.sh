@@ -131,7 +131,7 @@ fi
 
 ############################### 6. Regexes ###################################
 PRIV_IP_REGEX='^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|100\.(6[4-9]|[7-9][0-9]|1[0-1][0-9]|12[0-7])\.|169\.254\.)'
-CNAME_REGEX='(\.elb\.amazonaws\.com$|\.internal[-.]|\.internal\.cloudapp\.net$|\.internal\.gcpcloud\.net$)'
+CNAME_REGEX='(internal-.*\.elb\.amazonaws\.com$|\.rds\.amazonaws\.com$|\.cache\.amazonaws\.com$|\.internal\.cloudapp\.net$|\.database\.windows\.net$|\.redis\.cache\.windows\.net$|\.c\..*\.internal$|\.oraclevcn\.com$|\.internal[-.])'
 
 ################################ 7. Reporter #################################
 report() {
