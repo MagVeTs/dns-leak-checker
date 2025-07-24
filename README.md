@@ -2,6 +2,7 @@
 A simple yet powerful Bash script to discover internal IP addresses and suspicious cloud assets that are inadvertently exposed through public DNS records. This tool automates the process of running an OWASP Amass scan and parsing the results to highlight potential security misconfigurations.
 
 DNS Leak Checker assists in guarding against MITRE ATT&CK TA0043 – Reconnaissance, specifically: 
+
 T1596 - Search Open Technical Databases 
 T1595.002 - Active Scanning: DNS 
 T1590.002 - Gather Victim Network Info: DNS
