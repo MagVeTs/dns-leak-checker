@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# MIT License
-# Copyright (c) 2025 MagVeTs
-# Permission is hereby granted, free of charge, to any person obtaining a copy...
-
 set -euo pipefail
 ##############################################################################
 # DNS-Leak-Checker – discovers internal IP & suspicious CNAME leakage
@@ -15,7 +11,10 @@ DOMAIN=""; DOMAIN_LIST=""; INPUT_AMASS=""
 OUTPUT_PREFIX=""; EXPORT_JSON=false; EXPORT_CSV=false
 VERBOSE=false; LOG_FILE=""; FORCE_UPGRADE=false
 ALLOWLIST_CNAME_FILE="allowlist_cnames.txt"
-OUTPUT_DIR="dns-leak-checker-output"; mkdir -p "$OUTPUT_DIR"
+# NEW: Define the output folder name and a variable for its parent directory.
+OUTPUT_PARENT_DIR="."
+OUTPUT_FOLDER_NAME="dns-leak-checker-output"
+OUTPUT_DIR="" # This will be constructed after arguments are parsed.
 
 log()   { [[ "$VERBOSE" == true ]] && echo -e "[*] $*"; }
 fatal() { echo "[✘] $*" >&2; exit 1; }
@@ -79,13 +78,14 @@ Usage:
   $0 --input-amass amass.txt [options]
 
 Options:
-  --export-json          Write JSON report
-  --export-csv           Write CSV report
-  --output-prefix <name> Prefix for all output files
-  --upgrade-amass        Force upgrade of Amass before scanning
-  --log-file <file>      Tee console output to file
-  --verbose              Chatty output
-  --help                 Show this help
+  --output-dir <path>      Specify a parent directory for the output folder (default: current directory)
+  --output-prefix <name>   Prefix for all output report files
+  --export-json            Write JSON report
+  --export-csv             Write CSV report
+  --upgrade-amass          Force upgrade of Amass before scanning
+  --log-file <file>        Tee console output to file
+  --verbose                Chatty output
+  --help                   Show this help
 EOF
 exit 1
 }
@@ -95,6 +95,8 @@ while [[ $# -gt 0 ]]; do
     --domain)        DOMAIN="$2"; shift 2 ;;
     --domain-list)   DOMAIN_LIST="$2"; shift 2 ;;
     --input-amass)   INPUT_AMASS="$2"; shift 2 ;;
+    # NEW: Add argument for setting the output directory path.
+    --output-dir)    OUTPUT_PARENT_DIR="$2"; shift 2;;
     --output-prefix) OUTPUT_PREFIX="$2"; shift 2 ;;
     --export-json)   EXPORT_JSON=true; shift ;;
     --export-csv)    EXPORT_CSV=true; shift ;;
@@ -111,6 +113,11 @@ fi
 if [[ -n "$LOG_FILE" ]]; then
   exec > >(tee -a "$LOG_FILE") 2>&1
 fi
+
+# NEW: Construct the final output path and create the directory.
+OUTPUT_DIR="${OUTPUT_PARENT_DIR}/${OUTPUT_FOLDER_NAME}"
+mkdir -p "$OUTPUT_DIR"
+log "All output will be saved in: $OUTPUT_DIR"
 
 ################################ 5. Amass gating #############################
 NEED_AMASS=false
@@ -140,8 +147,6 @@ report() {
   eval "local -a C=(\"\${${ca}[@]:-}\")"
   eval "local -a W=(\"\${${wa}[@]:-}\")"
 
-  # FIX: Temporarily change IFS to only split on newlines. This prevents
-  # the shell from breaking our tab-separated strings into multiple array elements.
   local old_ifs=$IFS
   IFS=$'\n'
   # shellcheck disable=SC2207
