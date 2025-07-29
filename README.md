@@ -125,10 +125,11 @@ If you already have a detailed Amass text output file, you can parse it directly
 **Command-Line Options**
 
 |Flag             |Argument	     |Description
-|:--------------- |:-------------|:----------------------------------------------------------------|
+|:--------------- |:-------------|:------------------------------------------------------------------------------|
 |`--domain`	      |`example.com` |Scan a single domain.
 |`--domain-list`  |`domains.txt` |Scan a list of domains from a file.
 |`--input-amass`  |`amass.txt`	 |Parse a pre-existing detailed Amass output file.
+|`--output-dir`   |`<path>`      |Specify a parent directory for the output folder (default: current directory).
 |`--output-prefix`|`<name>`	     |A prefix for all output report files. Defaults to the domain name.
 |`--export-json`	|(none)	       |Generate a JSON report.
 |`--export-csv`   |(none)	       |Generate a CSV report.
